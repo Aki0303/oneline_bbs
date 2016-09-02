@@ -1,9 +1,9 @@
 <?php
   // ここにDBに登録する処理を記述する
   // ①DBへ接続
-  $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
-  $user = 'root';
-  $password = '';
+  $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
+  $user = 'LAA0778945';
+  $password = '8o4Hv282VT';
   $dbh = new PDO($dsn, $user, $password);
   $dbh->query('SET NAMES utf8');
 
@@ -11,8 +11,8 @@
   if (!empty($_POST)) {
 // ②SQL文を実行
     $sql = 'INSERT INTO `posts`( `nickname`, `comment`, `created`) VALUES (?, ?, now())';
-    $data[] =$_POST['nickname'];
-    $data[] =$_POST['comment'];
+    $data[] = $_POST['nickname'];
+    $data[] = $_POST['comment'];
     // SQLを実行
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
