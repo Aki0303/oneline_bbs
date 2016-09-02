@@ -1,6 +1,6 @@
 <?php
   // ここにDBに登録する処理を記述する
-  ①DBへ接続
+  // ①DBへ接続
   $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
   $user = 'LAA0778945';
   $password = '8o4Hv282VT';
