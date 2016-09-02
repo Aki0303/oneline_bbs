@@ -1,17 +1,18 @@
 <?php
   // ここにDBに登録する処理を記述する
-  // ①DBへ接続
-  // $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
-  // $user = 'LAA0778945';
-  // $password = '8o4Hv282VT';
-  $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
-  $user = 'root';
-  $password = '';
+  ①DBへ接続
+  $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
+  $user = 'LAA0778945';
+  $password = '8o4Hv282VT';
+  // $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
+  // $user = 'root';
+  // $password = '';
   $dbh = new PDO($dsn, $user, $password);
   $dbh->query('SET NAMES utf8');
 
 
 
+  // ---------------------------
   // 歯車アイコンクリック
   $editName = '';
   $editComment = '';
@@ -35,6 +36,9 @@
   }
 // データベース接続は切らない！
 
+
+
+  // ---------------------------
   // POST送信された時のみ登録処理を実行
   if (!empty($_POST)) {
     // 編集機能の実装　hiddenタグの中にidが入ってきたら...
@@ -44,7 +48,7 @@
       $data[] = $_POST['nickname'];
       $data[] = $_POST['comment'];
       $data[] = $_POST['id'];
-      
+
     } else {
       // データを登録する
       $sql = 'INSERT INTO `posts`( `nickname`, `comment`, `created`) VALUES (?, ?, now())';
@@ -56,6 +60,25 @@
       $stmt = $dbh->prepare($sql);
       $stmt->execute($data);
     }
+
+
+  // ---------------------------
+  // データの削除処理
+  if (!empty($_GET['action']) && $_GET['action'] == 'delete') {
+    $sql = 'DELETE FROM `posts` WHERE `id` = ?';
+    $data[] = $_GET['id'];
+
+    // SQLを実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+
+    // 処理完了後、bbs.phpに遷移する  
+    header('Location: bbs.php');
+    exit();
+  }
+
+
+  // ---------------------------
   // データの一覧表示
   $sql = 'SELECT * FROM `posts` ORDER BY `created` DESC';
   // SQLを実行
@@ -165,8 +188,6 @@
                     </div>
                   </a>
 
-
-
                   <div class="timeline-label">
                   <?php
                     // １.文字列型から日付型へ変換する
@@ -176,6 +197,7 @@
                   ?>
                       <h2><a href="#"><?php echo $d['nickname'] ?></a> <span><?php echo $created ?></span></h2>
                       <p><?php echo $d['comment'] ?></p>
+                      <a href="bbs.php?action=delete&id=<?php echo $d['id'];?>" onclick="return confirm('本当に削除しますか？');"><i class="fa fa-trash trash" aria-hidden="true"></i></a>
                   </div>
               </div>
           </article>
