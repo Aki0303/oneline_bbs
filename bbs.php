@@ -1,12 +1,12 @@
 <?php
   // ここにDBに登録する処理を記述する
   // ①DBへ接続
-  $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
-  $user = 'LAA0778945';
-  $password = '8o4Hv282VT';
-  // $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
-  // $user = 'root';
-  // $password = '';
+  // $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
+  // $user = 'LAA0778945';
+  // $password = '8o4Hv282VT';
+  $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
+  $user = 'root';
+  $password = '';
   $dbh = new PDO($dsn, $user, $password);
   $dbh->query('SET NAMES utf8');
 
@@ -28,7 +28,7 @@
 
     // データを取得
     $rec = $stmt->fetch(PDO::FETCH_ASSOC);
-    // 値をを変数に格納
+    // 値を変数に格納
     $editName = $rec['nickname'];
     $editComment = $rec['comment'];
     $id = $rec['id'];
@@ -51,7 +51,7 @@
 
     } else {
       // データを登録する
-      $sql = 'INSERT INTO `posts`( `nickname`, `comment`, `created`) VALUES (?, ?, now())';
+      $sql = 'INSERT INTO `posts`( `nickname`, `comment`, `created`,`delete_flag`) VALUES (?, ?, now(), 0)';
       $data[] =$_POST['nickname'];
       $data[] =$_POST['comment'];
     }
@@ -65,7 +65,9 @@
   // ---------------------------
   // データの削除処理
   if (!empty($_GET['action']) && $_GET['action'] == 'delete') {
-    $sql = 'DELETE FROM `posts` WHERE `id` = ?';
+    // $sql = 'DELETE FROM `posts` WHERE `id` = ?';
+    // 論理削除文を挿入
+    $sql= 'UPDATE `posts` SET `delete_flag`= 1 WHERE `id` = ?';
     $data[] = $_GET['id'];
 
     // SQLを実行
@@ -80,7 +82,7 @@
 
   // ---------------------------
   // データの一覧表示
-  $sql = 'SELECT * FROM `posts` ORDER BY `created` DESC';
+  $sql = 'SELECT * FROM `posts` WHERE `delete_flag` = 0 ORDER BY `created` DESC';
   // SQLを実行
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
