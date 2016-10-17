@@ -1,12 +1,12 @@
 <?php
   // ここにDBに登録する処理を記述する
   // ①DBへ接続
-  $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
-  $user = 'LAA0778945';
-  $password = '8o4Hv282VT';
-  // $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
-  // $user = 'root';
-  // $password = '';
+  // $dsn = 'mysql:dbname=LAA0778945-onelinebbs;host=mysql114.phy.lolipop.lan';
+  // $user = 'LAA0778945';
+  // $password = '8o4Hv282VT';
+  $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
+  $user = 'root';
+  $password = '';
   $dbh = new PDO($dsn, $user, $password);
   $dbh->query('SET NAMES utf8');
 
